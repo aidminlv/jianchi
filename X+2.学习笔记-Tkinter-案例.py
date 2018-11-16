@@ -117,18 +117,24 @@ lb.pack()
 baseFrame.mainloop()
 '''
 # 9.输入框案例
+'''
 import tkinter
+# 模拟的是登陆函数
 def reg():
+    # 从相应输入框中，得到用户的输入
     name = e1.get()
     pwd = e2.get()
 
     t1 = len(name)
     t2 = len(pwd)
 
-    if name == "111" and pwd = "222":
+    if name == "111" and pwd == "222":
+        # 需要理解下面代码的含义
         lb3["text"] = "登录成功"
     else:
         lb3["text"] = "用户名或密码错误"
+        # 输入框删除掉用户输入的内容
+        # 注意delete的两个参数，表示从第几个删除到第几个
         e1.delete(0, t1)
         e2.delete(0, t2)
 # 启动舞台
@@ -143,10 +149,53 @@ lb2.grid(row=1,column=0,stick=tkinter.W)
 e2 = tkinter.Entry(baseFrame)
 e2.grid(row=1, column=1, stick=tkinter.E)
 e2["show"] = "*"
-# Button参数
+# Button参数command的意思时，当按钮被点击后启动相应的处理函数
 btn = tkinter.Button(baseFrame, text="登陆", command=reg)
 btn.grid(row=2, column=1, stick=tkinter.E)
 lb3 = tkinter.Label(baseFrame, text="")
 lb3.grid(row = 3)
-# 启动循环
+# 启动主Frame
+baseFrame.mainloop()
+'''
+# 10.普通菜单案例
+'''
+import tkinter
+baseFrame = tkinter.Tk()
+menubar = tkinter.Menu(baseFrame)
+for item in ['File', 'Edit', 'View', 'About']:
+    menubar.add_command(label=item)
+baseFrame['menu'] = menubar
+baseFrame.mainloop()
+'''
+# 11.级联菜单案例
+'''
+import tkinter
+baseFrame = tkinter.Tk()
+menubar = tkinter.Menu(baseFrame)
+emenu = tkinter.Menu(menubar)
+for item in ['Copy', 'Past', 'Cut']:
+    emenu.add_command(label=item)
+menubar.add_cascade(label='File')
+menubar.add_cascade(label='Edit', menu=emenu)
+menubar.add_cascade(label='About')
+baseFrame['menu'] = menubar
+baseFrame.mainloop()
+'''
+# 12.弹出式菜单案例
+import tkinter
+def makeLabel():
+    global baseFrame
+    tkinter.Label(baseFrame, text="PHP是最好的编程语言，我用Python").pack()
+baseFrame = tkinter.Tk()
+menubar = tkinter.Menu(baseFrame)
+for x in ['麻辣香菇', '汽锅鸡', '东坡肘子']:
+    menubar.add_separator()
+    menubar.add_command(label=x)
+menubar.add_command(label='重庆火锅', command=makeLabel())
+# 事件处理函数一定要至少有一个参数，且第一个参数表示的是系统事件
+def pop(event):
+    # 注意使用event.x和event.x_root的区别
+    # menubar.post(event.x_root, event.y_root)
+    menubar.post(event.x_root, event.y_root)
+baseFrame.bind("<Button-3>", pop)
 baseFrame.mainloop()
